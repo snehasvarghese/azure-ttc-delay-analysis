@@ -43,8 +43,14 @@ The goal is to transform raw transit data into actionable insights through **Azu
 ---
 
 ## Data Flow Diagram
-![TTC Data Model](assets/ttc_data_model.png)
+![TTC Data Model](assets/azure_datapipeline.png)
 
+## Power BI Dashboard
+
+The Power BI dashboard provides a visual summary of key performance insights derived from the TTC delay data.  
+It highlights trends, station performance, and peak/off-peak comparisons across Toronto’s transit network.
+
+![Power BI Dashboard Preview](assets/dashboard_preview.png)
 
 ## Key Learnings
 - Implemented full Azure Medallion architecture (ADF → Synapse → Power BI)
