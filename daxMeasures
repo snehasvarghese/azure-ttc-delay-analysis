@@ -1,0 +1,83 @@
+DAX measures used for this analysis are:
+
+1\. 
+
+Peak vs OffPeak Difference = 
+
+VAR Peak = CALCULATE(AVERAGE('vw\_peak\_vs\_offpeak'\[AvgDelayMinutes]), 'vw\_peak\_vs\_offpeak'\[TimePeriod] = "Morning Peak" || 'vw\_peak\_vs\_offpeak'\[TimePeriod] = "Evening Peak")
+
+VAR OffPeak = CALCULATE(AVERAGE('vw\_peak\_vs\_offpeak'\[AvgDelayMinutes]), 'vw\_peak\_vs\_offpeak'\[TimePeriod] = "Off-Peak")
+
+RETURN
+
+Peak - OffPeak
+
+**Purpose:**
+
+Calculates how much higher the average delay is during peak hours compared to off-peak hours.
+
+**Used for:** Peak vs Off-Peak Bar Chart KPI.
+
+
+2\. 
+
+Worst Performing Station = 
+
+VAR \_topStation =
+
+&nbsp;   TOPN(
+
+&nbsp;       1,
+
+&nbsp;       SUMMARIZE('vw\_top\_stations', 
+
+&nbsp;           'vw\_top\_stations'\[Station],
+
+&nbsp;           "TotalDelays", SUM('vw\_top\_stations'\[TotalDelays])
+
+&nbsp;       ),
+
+&nbsp;       \[TotalDelays],
+
+&nbsp;       DESC
+
+&nbsp;   )
+
+RETURN
+
+&nbsp;   MAXX(\_topStation, 'vw\_top\_stations'\[Station])
+
+
+
+**Purpose:**
+
+Finds the station with the highest number of total delay incidents.
+
+**Used for:** Card visualization showing “Worst Performing Station.”
+
+
+
+I used a calculated column which is as follows:
+
+DelaySeverity = 
+
+SWITCH(
+
+&nbsp;   TRUE(),
+
+&nbsp;   VALUE(\[Min\_Delay]) <= 5, "Minor (0-5)",
+
+&nbsp;   VALUE(\[Min\_Delay]) <= 10, "Moderate (6-10)",
+
+&nbsp;   "Severe (10+)"
+
+)
+
+
+
+**Purpose:**
+
+Categorizes each delay event based on duration to simplify visual filtering and analysis.
+
+**Used for:** Stacked column chart by severity category.
+
